@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1019552022947",
+    "firebase_url": "https://daemun-f6c98.firebaseio.com",
+    "project_id": "daemun-f6c98",
+    "storage_bucket": "daemun-f6c98.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1019552022947:android:0084d94a67392da3",
+        "android_client_info": {
+          "package_name": "com.example.kimdoyeon.daemun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1019552022947-s9n7o2bjdao245rq51488bqprvf3fcvi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kimdoyeon.daemun",
+            "certificate_hash": "1b47c89376a751f62432a92fb481c95c8098c1e4"
+          }
+        },
+        {
+          "client_id": "1019552022947-6qki6i434fjaok5otm5dvdk3uem1h9e1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaRIM0bp8cfv2bOVg8UlLjM3iWqlflMhw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1019552022947-6qki6i434fjaok5otm5dvdk3uem1h9e1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

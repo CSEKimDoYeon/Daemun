@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">대문</string>
+    <string name="kakao_app_key">fba4972fcca8d34eccee05aa9a1ec668 </string>
+    <string name="facebook_app_id">490332578026378</string>
+    <string name="fb_login_protocol_scheme">fb490332578026378</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
