@@ -26,6 +26,7 @@
 
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="@string/kakao_app_key"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDaRIM0bp8cfv2bOVg8UlLjM3iWqlflMhw" />
 
     </application>
 

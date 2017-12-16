@@ -18,5 +18,22 @@
             android:layout_width="60dp"
             android:layout_height="30dp"
             />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <Button
+                android:id="@+id/Activity_main_gotoMap_btn"
+                android:background="#00ff0000"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                />
+        </RelativeLayout>
+
     </LinearLayout>
+
+
 </LinearLayout>
