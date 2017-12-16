@@ -15,6 +15,7 @@ import com.example.kimdoyeon.daemun.R;
 public class MainActivity extends AppCompatActivity {
 
     Button gotoDB_button;
+    Button gotoMap_button;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
         gotoDB_button = (Button)findViewById(R.id.Activity_main_gotoDB_btn);
         gotoDB_button.setOnClickListener(listener);
+
+        gotoMap_button = (Button)findViewById(R.id.Activity_main_gotoMap_btn);
+        gotoMap_button.setOnClickListener(listener);
 
     }
 
@@ -31,8 +35,13 @@ public class MainActivity extends AppCompatActivity {
         {
             switch(v.getId()){
                 case R.id.Activity_main_gotoDB_btn:
-                    Intent myintent = new Intent(MainActivity.this, BoardActivity.class);
-                    startActivity(myintent);
+                    Intent db_intent = new Intent(MainActivity.this, BoardActivity.class);
+                    startActivity(db_intent);
+                    overridePendingTransition(R.anim.rightin_activity, R.anim.not_move_activity);
+                    break;
+                case R.id.Activity_main_gotoMap_btn:
+                    Intent map_intent = new Intent(MainActivity.this, MapActivity.class);
+                    startActivity(map_intent);
                     overridePendingTransition(R.anim.rightin_activity, R.anim.not_move_activity);
                     break;
             }
