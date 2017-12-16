@@ -39,7 +39,7 @@
 
         <com.kakao.usermgmt.LoginButton
             android:id="@+id/com_kakao_login"
-
+            android:layout_marginBottom="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -50,6 +50,7 @@
             android:layout_height="50dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
+            android:layout_marginBottom="15dp"
             facefook:com_facebook_login_text="페이스북 아이디로 로그인">
 
         </com.facebook.login.widget.LoginButton>

@@ -53,14 +53,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="20dp"
                 android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/logout"
+                    android:id="@+id/start"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:background="@drawable/butten_to_radius_logoutbtn"
-                    android:text="로그아웃"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/butten_to_radius_appstartbtn"
+                    android:text="대문 시작하기."
                     android:textColor="#ff0000"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -71,12 +73,11 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:background="@drawable/butten_to_radius_appstartbtn"
-                    android:id="@+id/start"
+                    android:id="@+id/logout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginTop="20dp"
-                    android:text="대문 시작하기."
+                    android:background="@drawable/butten_to_radius_logoutbtn"
+                    android:text="로그아웃"
                     android:textColor="#ff0000"
                     android:textStyle="bold" />
             </LinearLayout>

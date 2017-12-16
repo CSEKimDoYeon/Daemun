@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.kimdoyeon.daemun.Daemun_DB.Events;
 import com.example.kimdoyeon.daemun.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,6 +43,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,10 +60,12 @@ public class MapActivity extends AppCompatActivity
     private GoogleMap mGoogleMap = null;
     private Marker currentMarker = null;
 
+    private Marker addedMarker = null;
+
     private static final String TAG = "googlemap_example";
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
-    private static final int UPDATE_INTERVAL_MS = 1000;  // 1초
+    private static final int UPDATE_INTERVAL_MS = 10000;  // 1초
     private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
 
     private AppCompatActivity mActivity;
@@ -168,7 +173,7 @@ public class MapActivity extends AppCompatActivity
         Log.d(TAG, "onMapReady :");
 
         mGoogleMap = googleMap;
-
+        getSampleMarkerItems(); // 새로 추가한 마커들..
 
         //런타임 퍼미션 요청 대화상자나 GPS 활성 요청 대화상자 보이기전에
         //지도의 초기위치를 서울로 이동
@@ -176,12 +181,11 @@ public class MapActivity extends AppCompatActivity
 
         //mGoogleMap.getUiSettings().setZoomControlsEnabled(false);
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(300)); // 시작 줌 레벨
         mGoogleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener(){
 
             @Override
             public boolean onMyLocationButtonClick() {
-
                 Log.d( TAG, "onMyLocationButtonClick : 위치에 따른 카메라 이동 활성화");
                 mMoveMapByAPI = true;
                 return true;
@@ -211,8 +215,6 @@ public class MapActivity extends AppCompatActivity
 
             }
         });
-
-
         mGoogleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
 
             @Override
@@ -221,15 +223,18 @@ public class MapActivity extends AppCompatActivity
 
             }
         });
+
     }
 
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     public void onLocationChanged(Location location) {
 
         currentPosition
                 = new LatLng( location.getLatitude(), location.getLongitude());
-
 
         Log.d(TAG, "onLocationChanged : ");
 
@@ -242,10 +247,88 @@ public class MapActivity extends AppCompatActivity
 
         //현재 위치에 마커 생성하고 이동
         setCurrentLocation(location, markerTitle, markerSnippet);
-
         mCurrentLocatiion = location;
+
+
+    }
+    public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
+
+        mMoveMapByUser = false;
+
+        if (currentMarker != null) currentMarker.remove();
+
+
+        LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(currentLatLng);
+        markerOptions.title(markerTitle);
+        markerOptions.snippet(markerSnippet);
+        markerOptions.draggable(true);
+
+        //구글맵의 디폴트 현재 위치는 파란색 동그라미로 표시
+        //마커를 원하는 이미지로 변경하여 현재 위치 표시하도록 수정 fix - 2017. 11.27
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.location_marker));
+
+        currentMarker = mGoogleMap.addMarker(markerOptions);
+        currentMarker.showInfoWindow(); // 마커 말풍선을 상시 띄워놓음. (내위치)
+
+        if ( mMoveMapByAPI ) {
+
+            Log.d( TAG, "setCurrentLocation :  mGoogleMap moveCamera "
+                    + location.getLatitude() + " " + location.getLongitude() ) ;
+            // CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 15);
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
+            mGoogleMap.moveCamera(cameraUpdate);
+        }
     }
 
+    private void getSampleMarkerItems() {
+        ArrayList<Events> sampleList = new ArrayList();
+
+        sampleList.add(new Events(36.363173, 127.347707, "대전 종합예술연합 버스킹공연", "봉암초등학교 정문 20:00"));
+        sampleList.add(new Events(36.361890, 127.350149, "아프리카 BJ가왕 버스킹 순회공연","파리바게트 앞 21:30"));
+        sampleList.add(new Events(36.362788, 127.349763, "통기타동아리 #&b 정기공연", "별리달리 지하 와이시어터 18:30"));
+        sampleList.add(new Events(36.361735, 127.350477, "함께 즐기는 보드게임", "보드게임 카페 메카 16:00"));
+        sampleList.add(new Events(36.362580, 127.348620, "충남대학교 총학생회 무료 페이스페인팅", "궁동 욧골공원 14:00"));
+
+        for (Events ev : sampleList) {
+            Log.e("HHASH", ev.getEvent_name()+"의 위치"+ ev.getLat() + "   " + ev.getLon());
+            addMarker(ev, false);
+        }
+    }
+
+    private Marker addMarker(Events ev, boolean isSelectedMarker) {
+
+        LatLng position = new LatLng(ev.getLat(), ev.getLon());
+
+
+        //int price = markerItem.getPrice();
+        //String formatted = NumberFormat.getCurrencyInstance().format((price));
+
+        //tv_marker.setText(formatted);
+
+        if (isSelectedMarker) { // 마커를 클릭했을 경우의 동작!
+            //tv_marker.setBackgroundResource(R.drawable.ic_marker_phone_blue);
+            //tv_marker.setTextColor(Color.WHITE);
+        } else {
+            //tv_marker.setBackgroundResource(R.drawable.ic_marker_phone);
+            //tv_marker.setTextColor(Color.BLACK);
+        }
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.title(ev.event_name); // 타이틀은 행사명
+        markerOptions.snippet("장소/시간 :" + ev.event_place );
+        markerOptions.position(position);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.location_marker));
+
+        return mGoogleMap.addMarker(markerOptions);
+
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     protected void onStart() {
@@ -377,40 +460,6 @@ public class MapActivity extends AppCompatActivity
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
-
-    public void setCurrentLocation(Location location, String markerTitle, String markerSnippet) {
-
-        mMoveMapByUser = false;
-
-
-        if (currentMarker != null) currentMarker.remove();
-
-
-        LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(currentLatLng);
-        markerOptions.title(markerTitle);
-        markerOptions.snippet(markerSnippet);
-        markerOptions.draggable(true);
-
-        //구글맵의 디폴트 현재 위치는 파란색 동그라미로 표시
-        //마커를 원하는 이미지로 변경하여 현재 위치 표시하도록 수정 fix - 2017. 11.27
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.location_marker));
-
-        currentMarker = mGoogleMap.addMarker(markerOptions);
-
-        currentMarker.showInfoWindow(); // 마커 말풍선을 상시 띄워놓음. (내위치)
-
-        if ( mMoveMapByAPI ) {
-
-            Log.d( TAG, "setCurrentLocation :  mGoogleMap moveCamera "
-                    + location.getLatitude() + " " + location.getLongitude() ) ;
-            // CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 15);
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(currentLatLng);
-            mGoogleMap.moveCamera(cameraUpdate);
-        }
-    }
 
 
     public void setDefaultLocation() {
@@ -554,7 +603,7 @@ public class MapActivity extends AppCompatActivity
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
         builder.setTitle("위치 서비스 비활성화");
-        builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
+        builder.setMessage("'대문' 앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n"
                 + "위치 설정을 수정하실래요?");
         builder.setCancelable(true);
         builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
